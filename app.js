@@ -39,9 +39,11 @@ app.use(express.static(path.join(__dirname, 'client/dist/Fileuploader')));
 /*------routes Define---------------------*/
 const routes = require('./routes/index.js');
 const Book = require('./routes/Book.js');
+const mpesa = require('./routes/payment.js');
 
 app.use('/api/', routes);
 app.use('/api/books', Book);
+app.use('/api/mpesa', mpesa);
 /*---------routes end---------------------*/
 // Send all other requests to the Angular app
 app.get('*', (req, res) => {

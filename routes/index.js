@@ -2,7 +2,6 @@ const express = require('express');
 const md5 = require('md5');
 const router = express.Router();
 var User=require('../Models/user.js'); //including model
-// var UserBooks=require('../Models/user-book.js'); //including model
 var jwt = require('jsonwebtoken');
 var mv = require('mv');  //its for chokidar
 var path= require('path');
@@ -147,15 +146,28 @@ router.get('/myjson',function(req,res){
                 callback(null);
 
           }, function (err) {
-              if (err){
+              if (err)
+              {
                  res.status(201).json({ status:false,data:err }); 
               }
               else
               {   
-
                   res.status(200).json(arr1); 
               }
           });
+});
+
+router.get('/mybooks',function(req,res){
+    var user_id='5b9cd8a19ab42204e46831f6';
+    User.findOne({_id:user_id}).populate('Book', 'Title Author').exec(function(err,results){
+      if(err){
+        res.json({error:true,info:err});
+      }
+      else
+      {
+        res.json({error:false,info:results});
+      }
+    });
 });
 
 module.exports = router;
