@@ -3,15 +3,16 @@ const router = express.Router();
 var request = require('request'),
     consumer_key = "jKti1AG6g1uM1Wv416FrDyaLcjhYPwAX",
     consumer_secret = "tWjGkyYzJaZKr50y";
-
+var oauth_token;
+var nanoid = require('nanoid');
 //for api
 router.get('/', function (req, res) {
     var host;
     if (req.secure == true) {
-      host = 'https://' + req.headers.host;
+        host = 'https://' + req.headers.host;
     }
     else {
-      host = 'http://' + req.headers.host;
+        host = 'http://' + req.headers.host;
     }
     var url = "https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials";
     var auth = "Basic " + new Buffer(consumer_key + ":" + consumer_secret).toString("base64");
@@ -31,7 +32,7 @@ router.get('/', function (req, res) {
                 console.log('auth body:', result); // Print the HTML for the Google homepage
 
                 //res.json({error:false,result:[],token:result.access_token});
-                var oauth_token = result.access_token;
+                oauth_token = result.access_token;
                 request(
                     {
                         method: 'POST',
@@ -42,21 +43,43 @@ router.get('/', function (req, res) {
                         json: {
                             "ShortCode": "602980",
                             "ResponseType": "Cancelled",
-                            "ConfirmationURL": host+"/api/mpesa/confirmation?token=esferaagoodcompany@",
-                            "ValidationURL": host+"/api/mpesa/validation_url?token=esferaagoodcompany@"
+                            "ConfirmationURL": host + "/api/mpesa/confirmation?token=esferaagoodcompany@",
+                            "ValidationURL": host + "/api/mpesa/validation_url?token=esferaagoodcompany@"
                         }
                     },
                     function (error, response, body) {
                         console.log('register error:', error); // Print the error if one occurred
                         console.log('register statusCode:', response && response.statusCode); // Print the response status code if a response was received
                         console.log('register body:', body); // Print the HTML for the Google homepage
-                        if(response.statusCode==200)
-                        {
-                            res.json({error:false,result:body});
+                        if (response.statusCode == 200) {
+                            /* 
+                                {"ConversationID":"","OriginatorCoversationID":"","ResponseDescription":"success"}
+                            */
+                            request(
+                                {
+                                    method: 'POST',
+                                    url: "https://sandbox.safaricom.co.ke/mpesa/c2b/v1/simulate",
+                                    headers: {
+                                        "Authorization": "Bearer " + oauth_token
+                                    },
+                                    json: {
+                                        //Fill in the request parameters with valid values
+                                        "ShortCode": "602980",
+                                        "CommandID": "CustomerBuyGoodsOnline",
+                                        "Amount": "1",
+                                        "Msisdn": "254708374149",
+                                        "BillRefNumber": nanoid()
+                                    }
+                                },
+                                function (error, response, body) {
+                                    // TODO: Use the body object to extract the response
+                                    console.log(body)
+                                    res.json(body);
+                                }
+                            )
                         }
-                        else
-                        {
-                            res.json({error:true,result:body});
+                        else {
+                            res.json({ error: true, result: body });
                         }
                     }
                 )
@@ -68,17 +91,15 @@ router.get('/', function (req, res) {
 });
 router.get('/validation_url', function (req, res) {
     console.log(req.query);
-    if(req.query.token)
-    {
-     res.json({"ResultCode":0, "ResultDesc":"Success", "ThirdPartyTransID": 0});
+    if (req.query.token) {
+        res.json({ "ResultCode": 0, "ResultDesc": "Success", "ThirdPartyTransID": 0 });
     }
-    else
-    {
-        res.json({"ResultCode":1, "ResultDesc":"Failed", "ThirdPartyTransID": 0});
-    }   
+    else {
+        res.json({ "ResultCode": 1, "ResultDesc": "Failed", "ThirdPartyTransID": 0 });
+    }
 });
 
 router.get('/confirmation', function (req, res) {
-    res.json({info:req.query});
+    res.json({ info: req.query });
 });
 module.exports = router;
