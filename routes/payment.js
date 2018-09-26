@@ -6,7 +6,13 @@ var request = require('request'),
 
 //for api
 router.get('/', function (req, res) {
-
+    var host;
+    if (req.secure == true) {
+      host = 'https://' + req.headers.host;
+    }
+    else {
+      host = 'http://' + req.headers.host;
+    }
     var url = "https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials";
     var auth = "Basic " + new Buffer(consumer_key + ":" + consumer_secret).toString("base64");
 
@@ -36,8 +42,8 @@ router.get('/', function (req, res) {
                         json: {
                             "ShortCode": "602980",
                             "ResponseType": "Cancelled",
-                            "ConfirmationURL": "http://localhost:8080/api/mpesa/confirmation?token=esferaagoodcompany@",
-                            "ValidationURL": "http://localhost:8080/api/mpesa/validation_url?token=esferaagoodcompany@"
+                            "ConfirmationURL": host+"/api/mpesa/confirmation?token=esferaagoodcompany@",
+                            "ValidationURL": host+"/api/mpesa/validation_url?token=esferaagoodcompany@"
                         }
                     },
                     function (error, response, body) {
