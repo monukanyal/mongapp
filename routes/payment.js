@@ -152,7 +152,10 @@ router.get('/b2c', function (req, res) {
                         console.log(body2);
                     //    res.send(body2);
                         setInterval(()=>{
-                            res.send(req.session.body);
+                            if(req.session.body)
+                            {
+                                res.send(req.session.body);
+                            }   
                         },2000);
                 });
         }
