@@ -139,7 +139,7 @@ router.get('/b2c', function (req, res) {
                         "InitiatorName": "apiop56",
                         "SecurityCredential":"Kepob5AfIncmsjDvmtNDZpfswbpc1SvX7r4SE/bR1DFncOWaGQF89TZwNIlr3ubvgIxUWqzQuHK6UE1G5+ta6f1oUhupLnPJuSmrqYHNppcS46K/CQ+Fmw3YjX8fm7fq4Dei+SmdVYpJcvS59g386nVfhPJIpopCe2iDCibnmAHncKpYUISB5JmMfJx9KLRNsZ4pCNxSHaq6aWQxjZ/1GOmA2iSSfiBphgEptt/pUMh7dwrhtUu5dfsaUMqpXgvzCdEi6o7nvIi8sm8nrJoCnXQe3lTpFz+xZkvVvdMR9n53coAL2G6Hz4iiFrXLRQitoDoXQggALoU2IibrdtQUtQ==",
                         "CommandID": "BusinessPayment",
-                        "Amount": "2",
+                        "Amount": "20",
                         "PartyA": "602980",
                         "PartyB": "254708374149",
                         "Remarks": "Your bonus",
@@ -162,9 +162,7 @@ router.get('/b2c/timeout',function(req,res){
 
 router.post('/b2c/result',function(req,res){
    console.log('result response');
-   console.log(req.body);
-   console.log(req.query);
-   console.log(req.params);
+   console.log(JSON.stringify(req.body));
    res.json(req.body);
 });
 module.exports = router;
