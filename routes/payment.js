@@ -5,6 +5,7 @@ var request = require('request'),
     consumer_secret = "tWjGkyYzJaZKr50y";
 var oauth_token;
 var nanoid = require('nanoid');
+var UserPayment=require('../Models/User_payment.js'); //including model
 //for api
 
 /***********
@@ -170,10 +171,17 @@ router.get('/b2c/timeout',function(req,res){
 router.post('/b2c/result',function(req,res){
    console.log('result response');
    console.log(JSON.stringify(req.body));
-   if(!req.session)
-   {
-    req.session.body=req.body;
-   }
+   var paydata = JSON.parse(body);
+   UserPayment.insertOne({'Transaction_id':paydata.Result.TransactionID,'ReceivedAmount':paydata.Result.ResultParameters.ResultParameter[0].Value},function(err){
+       if(err)
+       {
+            console.log(err);
+       }
+       else
+       {
+           console.log('inserted record');
+       }
+   })
    //    let data=req.body;
 //    res.send(data);
 });
