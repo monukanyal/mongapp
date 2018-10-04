@@ -165,7 +165,7 @@ router.get('/b2c/timeout',function(req,res){
 router.post('/b2c/result',function(req,res){
    console.log('result response');
    console.log(req.body.Result);
-   var small = new UserPayment({'Transaction_id':req.body.Result.TransactionID,'ReceivedAmount':'20'});
+   var small = new UserPayment({'Transaction_id':req.body.Result.TransactionID,'ReceivedAmount':req.body.Result.ResultParameters.ResultParameter[0].Value});
     small.save(function (err) {
         if(err)
         {
