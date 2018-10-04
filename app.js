@@ -9,6 +9,7 @@ const session = require('express-session');
 //var morgan = require('morgan'); //http request logger
 var mongoose=require('mongoose');
 const fileUpload = require('express-fileupload');
+var morgan = require('morgan');
 /*---------------------------
 
 var mongodb = require('mongodb');
@@ -31,12 +32,17 @@ app.use(fileUpload());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cookieParser());
+// initialize express-session to allow us track the logged-in user across sessions.
 app.use(session({
-  secret: 'something crazy',
+  key: 'user_sid',
+  secret: 'somerandonstuffs',
   resave: false,
-  saveUninitialized: true,
-  cookie: { secure: false }
+  saveUninitialized: false,
+  cookie: {
+      expires: 600000
+  }
 }));
+app.use(morgan('dev'));
 //app.use(morgan(':method :url :status :res[content-length] - :response-time ms'));
 
 // Angular DIST output folder
