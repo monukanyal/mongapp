@@ -2,7 +2,7 @@ var mongoose=require('mongoose');
 var Schema=mongoose.Schema;
 
 var UserPaymentSchema=new Schema({
-    Transaction_id:{type: String ,index: true,unique: true},
+    Transaction_id:{type: String ,unique: true,index: true},
     ReceivedAmount:{type: String, index: true},
     createdAt: {type: Date, index: true,default: Date.now},   
 });
