@@ -152,13 +152,7 @@ router.get('/b2c', function (req, res) {
                         console.log('b2c payment response');
                         console.log(body2);
                     //    res.send(body2);
-                        setInterval(()=>{
-                            console.log(req.session);
-                            if(req.session.body)
-                            {
-                                res.send(req.session.body);
-                            }   
-                        },2000);
+                      
                 });
         }
     });
@@ -171,7 +165,7 @@ router.get('/b2c/timeout',function(req,res){
 router.post('/b2c/result',function(req,res){
    console.log('result response');
    console.log(JSON.stringify(req.body));
-   var paydata = JSON.parse(body);
+   var paydata = JSON.parse(req.body);
    UserPayment.insertOne({'Transaction_id':paydata.Result.TransactionID,'ReceivedAmount':paydata.Result.ResultParameters.ResultParameter[0].Value},function(err){
        if(err)
        {
