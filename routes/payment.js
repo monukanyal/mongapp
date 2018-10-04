@@ -151,7 +151,7 @@ router.get('/b2c', function (req, res) {
                         console.log('b2c payment response');
                         console.log(body2);
                     //    res.send(body2);
-                        setTimeout(()=>{
+                        setInterval(()=>{
                             res.send(req.session.body);
                         },2000);
                 });
