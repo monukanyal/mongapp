@@ -6,6 +6,10 @@ var request = require('request'),
 var oauth_token;
 var nanoid = require('nanoid');
 //for api
+
+/***********
+ * C2B API *
+ ***********/
 router.get('/', function (req, res) {
     var host;
     if (req.secure == true) {
@@ -30,8 +34,6 @@ router.get('/', function (req, res) {
                 console.log('auth error:', error); // Print the error if one occurred
                 console.log('auth statusCode:', response && response.statusCode); // Print the response status code if a response was received
                 console.log('auth body:', result); // Print the HTML for the Google homepage
-
-                //res.json({error:false,result:[],token:result.access_token});
                 oauth_token = result.access_token;
                 request(
                     {
@@ -101,5 +103,63 @@ router.get('/validation_url', function (req, res) {
 
 router.get('/confirmation', function (req, res) {
     res.json({ info: req.query });
+});
+
+/***********
+ * B2C API *
+ ***********/
+
+router.get('/b2c', function (req, res) {
+    var host;
+    if (req.secure == true) {
+        host = 'https://' + req.headers.host;
+    }
+    else {
+        host = 'http://' + req.headers.host;
+    }
+    var url = "https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials";
+    var auth = "Basic " + new Buffer(consumer_key + ":" + consumer_secret).toString("base64");
+    request({ url: url, headers: { "Authorization": auth } }, (error, response, body)=>{
+        if (response.statusCode == 200) {
+            var result = JSON.parse(body);
+            console.log('auth error:', error); // Print the error if one occurred
+            console.log('auth statusCode:', response && response.statusCode); // Print the response status code if a response was received
+            console.log('auth body:', result); // Print the HTML for the Google homepage
+            oauth_token = result.access_token;
+
+            //creating b2c transaction
+            request(
+                {
+                    method:"POST",
+                    url: "https://sandbox.safaricom.co.ke/mpesa/b2c/v1/paymentrequest",
+                    headers:{
+                        "Authorization":"Bearer "+oauth_token
+                    },
+                    json : {
+                        "InitiatorName": "apiop56",
+                        "SecurityCredential":"Kepob5AfIncmsjDvmtNDZpfswbpc1SvX7r4SE/bR1DFncOWaGQF89TZwNIlr3ubvgIxUWqzQuHK6UE1G5+ta6f1oUhupLnPJuSmrqYHNppcS46K/CQ+Fmw3YjX8fm7fq4Dei+SmdVYpJcvS59g386nVfhPJIpopCe2iDCibnmAHncKpYUISB5JmMfJx9KLRNsZ4pCNxSHaq6aWQxjZ/1GOmA2iSSfiBphgEptt/pUMh7dwrhtUu5dfsaUMqpXgvzCdEi6o7nvIi8sm8nrJoCnXQe3lTpFz+xZkvVvdMR9n53coAL2G6Hz4iiFrXLRQitoDoXQggALoU2IibrdtQUtQ==",
+                        "CommandID": "BusinessPayment",
+                        "Amount": "2",
+                        "PartyA": "602980",
+                        "PartyB": "254708374149",
+                        "Remarks": "Your bonus",
+                        "QueueTimeOutURL": host+"/api/mpesa/b2c/timeout",
+                        "ResultURL": host+"/api/mpesa/b2c/result",
+                        "Occasion": "NA"
+                      }
+                }, function (error2, response2, body2) {
+                        console.log('b2c payment response');
+                        console.log(body2);
+                });
+        }
+    });
+});
+
+router.get('/b2c/timeout',function(req,res){
+        res.json({text:"request timeout,try again later!!"})
+});
+
+router.get('/b2c/result',function(req,res){
+    res.json({ text:"b2c result url called",info: req.query });
 });
 module.exports = router;
