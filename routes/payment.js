@@ -164,9 +164,10 @@ router.get('/b2c/timeout',function(req,res){
 
 router.post('/b2c/result',function(req,res){
    console.log('result response');
-   console.log(JSON.stringify(req.body));
+   console.log(req.body);
+   //paydata.Result.ResultParameters.ResultParameter[0].Value
    var paydata = JSON.parse(req.body);
-   UserPayment.insertOne({'Transaction_id':paydata.Result.TransactionID,'ReceivedAmount':paydata.Result.ResultParameters.ResultParameter[0].Value},function(err){
+   UserPayment.insertOne({'Transaction_id':paydata.Result.TransactionID,'ReceivedAmount':'20'},function(err){
        if(err)
        {
             console.log(err);
