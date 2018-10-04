@@ -150,6 +150,7 @@ router.get('/b2c', function (req, res) {
                 }, function (error2, response2, body2) {
                         console.log('b2c payment response');
                         console.log(body2);
+                        res.json(body2);
                 });
         }
     });
@@ -160,6 +161,7 @@ router.get('/b2c/timeout',function(req,res){
 });
 
 router.post('/b2c/result',function(req,res){
-    res.json({ text:"b2c result url called",info: req.body });
+   console.log('result response');
+   console.log(res.body);
 });
 module.exports = router;
