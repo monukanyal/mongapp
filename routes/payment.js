@@ -150,7 +150,7 @@ router.get('/b2c', function (req, res) {
                 }, function (error2, response2, body2) {
                         console.log('b2c payment response');
                         console.log(body2);
-                       
+                       res.send(body2);
                 });
         }
     });
