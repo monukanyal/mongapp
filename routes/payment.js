@@ -171,8 +171,8 @@ router.post('/b2c/result',function(req,res){
    console.log('result response');
    console.log(req.body.Result);
 
-   var str=req.body.Result.ResultParameters.ResultParameter[0].Value;
-   var Msisdn=(str.substring(0, str.indexOf("-"))).trim()
+   var str=req.body.Result.ResultParameters.ResultParameter[4].Value;
+   var Msisdn=(str.substring(0, str.indexOf("-"))).trim();
    var small = new UserPayment({'Transaction_id':req.body.Result.TransactionID,'ReceivedAmount':req.body.Result.ResultParameters.ResultParameter[0].Value,'Receiver_msisdn':Msisdn});
     small.save(function (err) {
         if(err)
