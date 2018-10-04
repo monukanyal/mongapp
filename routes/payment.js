@@ -160,9 +160,9 @@ router.get('/b2c/timeout',function(req,res){
         res.json({text:"request timeout,try again later!!"})
 });
 
-router.post('/b2c/result',function(req,res){
+router.get('/b2c/result',function(req,res){
    console.log('result response');
-   console.log(res.body);
+   //console.log(res.body);
    console.log(res.query);
    console.log(res.params);
 });
