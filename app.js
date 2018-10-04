@@ -10,6 +10,7 @@ const session = require('express-session');
 var mongoose=require('mongoose');
 const fileUpload = require('express-fileupload');
 var morgan = require('morgan');
+var MongoDBStore = require('connect-mongodb-session')(session);
 /*---------------------------
 
 var mongodb = require('mongodb');
@@ -33,17 +34,29 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cookieParser());
 // initialize express-session to allow us track the logged-in user across sessions.
+var store = new MongoDBStore(
+  {
+    uri: 'mongodb://monu:monu@ds261138.mlab.com:61138/apidb',
+    collection: 'mySessions'
+  },
+  function(error) {
+    // Should have gotten an error
+  });
+ 
+store.on('error', function(error) {
+  // Also get an error here
+});
+ 
 app.use(session({
-  key: 'user_sid',
-  secret: 'somerandonstuffs',
-  resave: false,
-  saveUninitialized: false,
+  secret: 'This is a secret',
   cookie: {
-      expires: 600000
-  }
+    maxAge: 1000 * 60 * 60 * 24 * 7 // 1 week
+  },
+  store: store,
+  resave: true,
+  saveUninitialized: true
 }));
-app.use(morgan('dev'));
-//app.use(morgan(':method :url :status :res[content-length] - :response-time ms'));
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms'));
 
 // Angular DIST output folder
 //app.use(express.static(path.join(__dirname, 'client/dist/client')));
