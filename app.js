@@ -33,7 +33,7 @@ app.use(cookieParser());
 //app.use(morgan(':method :url :status :res[content-length] - :response-time ms'));
 
 // Angular DIST output folder
-app.use(express.static(path.join(__dirname, 'client/dist/client')));
+//app.use(express.static(path.join(__dirname, 'client/dist/client')));
 
 // API location
 /*------routes Define---------------------*/
@@ -47,7 +47,8 @@ app.use('/api/mpesa', mpesa);
 /*---------routes end---------------------*/
 // Send all other requests to the Angular app
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'client/dist/client/index.html'));
+  res.send('Welcome to mpesa');
+    //res.sendFile(path.join(__dirname, 'client/dist/client/index.html'));
 });
 
 //Set Port
