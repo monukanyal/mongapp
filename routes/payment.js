@@ -169,8 +169,11 @@ router.get('/b2c/timeout',function(req,res){
 router.post('/b2c/result',function(req,res){
    console.log('result response');
    console.log(JSON.stringify(req.body));
-   req.session.body=req.body;
-//    let data=req.body;
+   if(!req.session)
+   {
+    req.session.body=req.body;
+   }
+   //    let data=req.body;
 //    res.send(data);
 });
 module.exports = router;
