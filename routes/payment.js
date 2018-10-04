@@ -151,6 +151,9 @@ router.get('/b2c', function (req, res) {
                         console.log('b2c payment response');
                         console.log(body2);
                     //    res.send(body2);
+                        setTimeout(()=>{
+                            res.send(req.session.body);
+                        },2000);
                 });
         }
     });
@@ -163,7 +166,8 @@ router.get('/b2c/timeout',function(req,res){
 router.post('/b2c/result',function(req,res){
    console.log('result response');
    console.log(JSON.stringify(req.body));
-   let data=req.body;
-   res.send(data);
+   req.session.body=req.body;
+//    let data=req.body;
+//    res.send(data);
 });
 module.exports = router;

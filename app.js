@@ -5,6 +5,7 @@ var app = express();
 const http = require('http');
 const path = require('path');
 const md5=require('md5');
+const session = require('express-session');
 //var morgan = require('morgan'); //http request logger
 var mongoose=require('mongoose');
 const fileUpload = require('express-fileupload');
@@ -30,6 +31,12 @@ app.use(fileUpload());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cookieParser());
+app.use(session({
+  secret: 'something crazy',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: false }
+}));
 //app.use(morgan(':method :url :status :res[content-length] - :response-time ms'));
 
 // Angular DIST output folder
