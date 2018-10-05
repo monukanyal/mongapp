@@ -165,7 +165,6 @@ router.get('/b2c/timeout',function(req,res){
         res.json({text:"request timeout,try again later!!"})
 });
 
-//str.substring(0, str.indexOf("-"))
 
 router.post('/b2c/result',function(req,res){
    console.log('result response');

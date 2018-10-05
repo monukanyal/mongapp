@@ -1,5 +1,4 @@
-const hostname = 'localhost';
-
+require('./db/config');
 const express = require('express');
 var app = express();
 const http = require('http');
@@ -8,15 +7,9 @@ const md5=require('md5');
 var mongoose=require('mongoose');
 const fileUpload = require('express-fileupload');
 var morgan = require('morgan');
-/*---------------------------
 
-var mongodb = require('mongodb');
-var MongoClient = mongodb.MongoClient;
-var url ="mongodb://Esfera:esfera456@ds133547.mlab.com:33547/esferasoft";
-
-------------------------------*/
 mongoose.Promise = require('bluebird');
-mongoose.connect('mongodb://monu:monu@ds261138.mlab.com:61138/apidb', { useMongoClient: true });
+mongoose.connect(process.env.MONGODB_URI, { useMongoClient: true });
 
 const favicon = require('serve-favicon');
 const cookieParser = require('cookie-parser');

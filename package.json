@@ -4,16 +4,17 @@
   "description": "its mean simple app",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js"
+    "start": "node app.js",
+    "test":"export NODE_ENV=development || SET NODE_ENV=development && node app.js"
   },
   "dependencies": {
     "async": "^2.6.0",
     "base64-to-image": "^1.0.2",
-    "body-parser": "^1.16.1",
-    "connect-ensure-login": "^0.1.1",
-    "connect-flash": "^0.1.1",
-    "connect-mongo": "^2.0.1",
-    "cookie-parser": "^1.4.3",
+    "body-parser": "^1.config6.1",
+    "connect-ensure-logconfign": "^0.1.1",
+    "connect-flash": "^config.1.1",
+    "connect-mongo": "^config.0.1",
+    "cookie-parser": "^config.4.3",
     "debug": "^2.6.1",
     "dotenv": "^4.0.0",
     "ejs": "^2.5.7",
